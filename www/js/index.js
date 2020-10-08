@@ -20,6 +20,7 @@
 // Wait for the deviceready event before using any of Cordova's device APIs.
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 document.addEventListener('deviceready', onDeviceReady, false);
+document.getElementById("btnCameraOpen").addEventListener("click",onCameraOpen);
 
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
@@ -27,33 +28,65 @@ function onDeviceReady() {
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     document.getElementById('deviceready').classList.add('ready');
 
-    navigator.camera.getPicture(onSuccess,onFail, { quality: 50, 
-        destinationType: Camera.DestinationType.FILE_URI});
-
-    function onSuccess(imageURI){
-        var image = document.getElementById('myImage');
-        image.src = imageURI;
-    }
-
-    function onFail(message){
-        alert('Failed because: ' + message);
-    }
+    
 }
 
 function onCameraOpen(){
+    
+
+        var delayInMilliseconds = 2000; //1 second
+
+        cordova.plugins.CordovaMqTTPlugin.connect({
+            url:"tcp://test.mosquitto.org", //a public broker used for testing purposes only. Try using a self hosted broker for production.
+            port:"1883"
+        });
+        
+
+
+    // setTimeout(function() {
+    //     cordova.plugins.CordovaMqTTPlugin.subscribe({
+    //         topic:"MQTTR",
+    //         qos:0
+    //     });
+    // }, delayInMilliseconds); 
+
+    // setTimeout(function() {
+    //     cordova.plugins.CordovaMqTTPlugin.publish({
+    //         topic:"MQTT",
+    //         payload:"Hello from cordova"
+    //     });
+    // }, delayInMilliseconds)
+
     navigator.camera.getPicture(onSuccess,onFail, { quality: 50, 
         destinationType: Camera.DestinationType.FILE_URI});
+                     
+
 
     function onSuccess(imageURI){
         var image = document.getElementById('myImage');
         image.src = imageURI;
+        cordova.plugins.CordovaMqTTPlugin.publish({
+            topic:"MQTT",
+            payload:"Er werd een foto genomen"
+        });
+       
     }
 
     function onFail(message){
         alert('Failed because: ' + message);
-    }
-
-    
+        cordova.plugins.CordovaMqTTPlugin.publish({
+            topic:"MQTT",
+            payload:"Er werd geen foto genomen"
+        });
+    }    
 }
+
+
+
+
+
+
+
+
 
 
