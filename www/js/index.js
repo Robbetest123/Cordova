@@ -34,7 +34,7 @@ function onDeviceReady() {
 function onCameraOpen(){
     
 
-        var delayInMilliseconds = 2000; //1 second
+        var delayInMilliseconds = 2000; //2 seconds
 
         cordova.plugins.CordovaMqTTPlugin.connect({
             url:"tcp://test.mosquitto.org", //a public broker used for testing purposes only. Try using a self hosted broker for production.
@@ -44,16 +44,9 @@ function onCameraOpen(){
 
 
     // setTimeout(function() {
-    //     cordova.plugins.CordovaMqTTPlugin.subscribe({
-    //         topic:"MQTTR",
-    //         qos:0
-    //     });
-    // }, delayInMilliseconds); 
-
-    // setTimeout(function() {
     //     cordova.plugins.CordovaMqTTPlugin.publish({
     //         topic:"MQTT",
-    //         payload:"Hello from cordova"
+    //         payload:"Hello from the cordova app!"
     //     });
     // }, delayInMilliseconds)
 
